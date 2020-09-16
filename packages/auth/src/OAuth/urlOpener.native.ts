@@ -10,7 +10,29 @@
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
+//default code:
+// import { Linking } from 'react-native';
+// export var launchUri = function (url) { return Linking.openURL(url); };
+// //# sourceMappingURL=urlOpener.native.js.map
 
-import { Linking } from 'react-native';
+Object.defineProperty(exports, '__esModule', { value: true });
+var react_native_1 = require('react-native');
+var safariView = require('react-native-safari-view');
 
-export const launchUri = url => Linking.openURL(url);
+exports.launchUri = function (url) {
+	if (react_native_1.Platform.OS == 'ios') {
+		return safariView.default
+			.isAvailable()
+			.then(
+				safariView.default.show({
+					url: url,
+				})
+			)
+			.catch((error) => {
+				react_native_1.Linking.openURL(url);
+				// Fallback WebView code for iOS 8 and earlier
+			});
+	} else {
+		return react_native_1.Linking.openURL(url);
+	}
+};
